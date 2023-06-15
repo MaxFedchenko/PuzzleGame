@@ -18,10 +18,8 @@
         ></game-score>
       </div>
 
-      <br />
-
       <div>
-        <button v-on:click="switchShownScores">Switch</button>
+        <button v-on:click="switchShownScores">Switch Scores</button>
         <button v-on:click="quitScores">Quit</button>
       </div>
     </div>
@@ -88,6 +86,7 @@ export default {
   position: relative;
   flex-grow: 1;
   overflow-y: scroll;
+  border-bottom: 1px solid black;
 }
 #scores > * {
   position: absolute;
