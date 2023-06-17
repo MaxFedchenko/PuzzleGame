@@ -14,35 +14,30 @@ namespace PuzzleGame.Services.Score
 
         public async Task<List<Score>> GetTopScores(int top)
         {
-            var scores = await scoreContext.Scores
+            return await scoreContext.Scores
                 .Include(s => s.User)
                 .OrderBy(s => s.TimeSeconds)
                 .Take(top)
-                .ToListAsync();
-
-            return scores.Select(s => new Score
-            {
-                Name = s.User.Name,
-                TimeSeconds = s.TimeSeconds,
-                MovesAmount = s.MovesAmount
-            }).ToList();
+                .Select(s => new Score
+                {
+                    Name = s.User.Name,
+                    TimeSeconds = s.TimeSeconds,
+                    MovesAmount = s.MovesAmount
+                }).ToListAsync();
         }
 
         public async Task<List<Score>> GetUserScores(string user_name)
         {
-            var scores = await scoreContext.Scores
+            return await scoreContext.Scores
                 .Include(s => s.User)
                 .Where(s => s.User.Name == user_name)
                 .OrderBy(s => s.TimeSeconds)
-                .ToListAsync();
-           
-
-            return scores.Select(s => new Score
-            {
-                Name = s.User.Name,
-                TimeSeconds = s.TimeSeconds,
-                MovesAmount = s.MovesAmount
-            }).ToList();
+                .Select(s => new Score
+                {
+                    Name = s.User.Name,
+                    TimeSeconds = s.TimeSeconds,
+                    MovesAmount = s.MovesAmount
+                }).ToListAsync();
         }
 
         public async Task AddScore(Score score)

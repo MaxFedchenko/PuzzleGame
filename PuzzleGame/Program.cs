@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Builder;
 using PuzzleGame.DTOs;
 using PuzzleGame.EF;
 using PuzzleGame.Services.Score;
@@ -11,26 +10,26 @@ builder.Services.AddTransient<IScoreService, ScoreService>();
 var app = builder.Build();
 
 app.UseCors(builder => builder.WithOrigins("http://localhost:8080")
-                              .AllowAnyHeader()
-                              .AllowAnyMethod());
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
 
 app.UseStaticFiles();
 
 app.MapGet("api/score/top/{top}", async (int top) =>
 {
-    var score_service = app.Services.GetService<IScoreService>();
+    var score_service = app.Services.GetRequiredService<IScoreService>();
     return await score_service!.GetTopScores(top);
 });
 
 app.MapGet("api/score/{name}", async (string name) =>
 {
-    var score_service = app.Services.GetService<IScoreService>();
+    var score_service = app.Services.GetRequiredService<IScoreService>();
     return await score_service!.GetUserScores(name);
 });
 
 app.MapPost("api/score", async (ScoreDTO score) =>
 {
-    var score_service = app.Services.GetService<IScoreService>();
+    var score_service = app.Services.GetRequiredService<IScoreService>();
 
     await score_service!.AddScore(new Score
     {
