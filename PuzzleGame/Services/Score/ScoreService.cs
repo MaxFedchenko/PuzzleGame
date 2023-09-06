@@ -23,7 +23,8 @@ namespace PuzzleGame.Services.Score
                     Name = s.User.Name,
                     TimeSeconds = s.TimeSeconds,
                     MovesAmount = s.MovesAmount
-                }).ToListAsync();
+                })
+                .ToListAsync();
         }
 
         public async Task<List<Score>> GetUserScores(string user_name)
@@ -37,7 +38,8 @@ namespace PuzzleGame.Services.Score
                     Name = s.User.Name,
                     TimeSeconds = s.TimeSeconds,
                     MovesAmount = s.MovesAmount
-                }).ToListAsync();
+                })
+                .ToListAsync();
         }
 
         public async Task AddScore(Score score)

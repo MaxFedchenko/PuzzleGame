@@ -56,6 +56,7 @@ export default {
       this.user_name = user_name
 
       const baseUrl = process.env.VUE_APP_WEB_API ?? ''
+
       fetch(baseUrl + 'api/score/top/' + this.top)
         .then((res) => res.json())
         .then((scores) => (this.top_scores = scores.map(this.mapDTO)))

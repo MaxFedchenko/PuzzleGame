@@ -4,7 +4,7 @@
       <div
         v-for="(piece, index) in pieces"
         class="piece"
-        v-bind:style="{ left: piece.x * 25 + '%', top: piece.y * 25 + '%' }"
+        :style="{ left: piece.x * 25 + '%', top: piece.y * 25 + '%' }"
         v-on:click="movePiece(piece)"
       >
         <img :src="`${base_pieces_path}piece_${index + 1}.jpg`" />

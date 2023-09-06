@@ -12,7 +12,7 @@
       </div>
       <div id="form-block">
         <input v-model="name" type="text" placeholder="Name" />
-        <button v-on:click="addScore">Submit</button>
+        <button v-on:click.once="addScore">Submit</button>
       </div>
     </div>
   </div>
@@ -28,6 +28,8 @@ export default {
   },
   methods: {
     addScore: async function () {
+      console.log('addScore')
+
       await fetch((process.env.VUE_APP_WEB_API ?? '') + 'api/score', {
         method: 'POST',
         headers: {

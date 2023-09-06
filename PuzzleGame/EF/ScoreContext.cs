@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PuzzleGame.Core;
+
 using PuzzleGame.Entities;
 
 namespace PuzzleGame.EF
 {
     public class ScoreContext : DbContext
     {
+        private readonly string conn_string;
+
         public DbSet<User> Users { get; set; }
         public DbSet<Score> Scores { get; set; }
 
-        public ScoreContext()
+        public ScoreContext(IConfiguration app_config)
         {
+            conn_string = app_config.GetConnectionString("DefaultConnection")!;
             Database.EnsureCreated();
         }
 
@@ -23,7 +26,7 @@ namespace PuzzleGame.EF
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(Global.AppSettings.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer(conn_string);
         }
     }
 }

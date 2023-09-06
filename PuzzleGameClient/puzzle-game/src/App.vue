@@ -2,7 +2,7 @@
   <div id="app">
     <div
       id="start-game-screen"
-      v-show="isStartGameScreenShown"
+      v-show="isGameStartScreenShown"
       style="z-index: 2"
     >
       <button v-on:click="startGame">Start Game</button>
@@ -10,21 +10,21 @@
 
     <add-score-form
       v-show="isAddScoreFormShown"
-      v-bind:gameTimeSeconds="gameTimeSeconds"
-      v-bind:movesCount="movesCount"
-      v-bind:quitForm="onQuitAddScoreForm"
+      :gameTimeSeconds="gameTimeSeconds"
+      :movesCount="movesCount"
+      :quitForm="onQuitAddScoreForm"
       style="z-index: 2"
     />
 
     <game-scores
       ref="scores"
-      v-show="isScoresShown"
+      v-show="isScoresInfoShown"
       :quitScores="onQuitScores"
       style="z-index: 2"
-    ></game-scores>
+    />
 
-    <div id="blur-screen" v-show="isBlurScreen" style="z-index: 1"></div>
-    <puzzle-game ref="game" v-bind:gameOver="onGameOver" style="z-index: 0" />
+    <div id="blur-screen" v-show="isBlurScreenShown" style="z-index: 1"></div>
+    <puzzle-game ref="game" :gameOver="onGameOver" style="z-index: 0" />
   </div>
 </template>
 
@@ -42,23 +42,23 @@ export default {
   },
   data: function () {
     return {
-      isStartGameScreenShown: true,
-      isBlurScreen: true,
+      isGameStartScreenShown: true,
+      isBlurScreenShown: true,
       isAddScoreFormShown: false,
-      isScoresShown: false,
+      isScoresInfoShown: false,
       gameTimeSeconds: null,
       movesCount: null,
     }
   },
   methods: {
     startGame: function () {
-      this.isStartGameScreenShown = false
-      this.isBlurScreen = false
+      this.isGameStartScreenShown = false
+      this.isBlurScreenShown = false
 
       this.$refs.game.startGame()
     },
     onGameOver: function (gameTimeSeconds, movesCount) {
-      this.isBlurScreen = true
+      this.isBlurScreenShown = true
       this.isAddScoreFormShown = true
 
       this.gameTimeSeconds = gameTimeSeconds
@@ -66,13 +66,13 @@ export default {
     },
     onQuitAddScoreForm: function (user_name) {
       this.isAddScoreFormShown = false
-      this.isScoresShown = true
+      this.isScoresInfoShown = true
 
       this.$refs.scores.loadScores(user_name)
     },
     onQuitScores: function () {
-      this.isScoresShown = false
-      this.isStartGameScreenShown = true
+      this.isScoresInfoShown = false
+      this.isGameStartScreenShown = true
     },
   },
 }

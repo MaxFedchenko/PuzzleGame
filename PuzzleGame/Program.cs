@@ -9,40 +9,34 @@ builder.Services.AddTransient<IScoreService, ScoreService>();
 
 var app = builder.Build();
 
-app.UseCors(builder => builder.WithOrigins("http://localhost:8080")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
-
-app.UseStaticFiles();
-
-app.MapGet("api/score/top/{top}", async (int top) =>
+if (app.Environment.IsDevelopment())
 {
-    var score_service = app.Services.GetRequiredService<IScoreService>();
-    return await score_service!.GetTopScores(top);
-});
+    app.UseCors(builder => builder.WithOrigins("http://localhost:8080")
+                                  .AllowAnyHeader()
+                                  .AllowAnyMethod());
+}
 
-app.MapGet("api/score/{name}", async (string name) =>
+app.UseFileServer();
+
+var apiGroup = app.MapGroup("api");
+var scoreGroup = apiGroup.MapGroup("score");
+
+scoreGroup.MapGet("top/{top}", async (int top, IScoreService score_service) =>
+    await score_service.GetTopScores(top));
+
+scoreGroup.MapGet("{name}", async (string name, IScoreService score_service) =>
+    await score_service.GetUserScores(name));
+
+scoreGroup.MapPost("", async (ScoreDTO score, IScoreService score_service) =>
 {
-    var score_service = app.Services.GetRequiredService<IScoreService>();
-    return await score_service!.GetUserScores(name);
-});
-
-app.MapPost("api/score", async (ScoreDTO score) =>
-{
-    var score_service = app.Services.GetRequiredService<IScoreService>();
-
-    await score_service!.AddScore(new Score
+    await score_service.AddScore(new Score
     {
         Name = score.Name,
         TimeSeconds = score.TimeSeconds,
         MovesAmount = score.MovesAmount,
     });
-});
 
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/index.html");
-    return Task.FromResult(0);
+    return Results.StatusCode(201);
 });
 
 app.Run();
